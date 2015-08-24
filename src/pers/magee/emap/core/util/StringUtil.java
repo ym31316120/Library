@@ -1,5 +1,7 @@
 package pers.magee.emap.core.util;
 
+import java.io.UnsupportedEncodingException;
+import java.net.URLEncoder;
 import java.util.StringTokenizer;
 
 /**
@@ -257,6 +259,42 @@ public class StringUtil {
 			}
 		}
 		return result;
+	}
+	/**
+	 * 对传递的URL进行编码转换，保证不同操作系统传递的URL可以正确的解析，编码采用UTF-8
+	 * 某些时候，浏览器默认发送URL的编码是gb2312，未经编码的UTF-8中文就会出现乱码的情况，所以最好进行URL编码转换
+	 * @param url
+	 * @return 处理好的URL
+	 */
+	public static String getUrlEncode(String url){
+		StringBuffer sb = new StringBuffer();
+		try{
+			int index = url.indexOf("?");
+			if(index<0){
+				return url;  //如果URL中不包含?则表示没有参数传递，那么URL肯定都是英文字符，因此不需要特殊处理直接返回即可
+			}
+			String baseUrl = url.substring(0,index+1);
+			sb.append(baseUrl);
+			String paramsUrl = url.substring(index+1,url.length());
+			String [] params = paramsUrl.split("&");
+			for(int i =0;i<params.length;i++){
+				String param = params[i].substring(0, params[i].indexOf("=")+1);
+				String value = params[i].substring(params[i].indexOf("=")+1, params[i].length());
+				
+				String paramValue = "";
+				if(i==0){
+					paramValue = String.format(param+"%s", URLEncoder.encode(value,"UTF-8"));
+				}else{
+					paramValue = String.format("&"+param+"%s", URLEncoder.encode(value,"UTF-8"));
+				}
+				sb.append(paramValue);
+			}
+			return sb.toString();
+		}
+		catch(UnsupportedEncodingException e){
+			e.printStackTrace();
+		}
+		return "";
 	}
 
 }
