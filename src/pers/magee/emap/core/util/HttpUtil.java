@@ -59,7 +59,7 @@ public class HttpUtil {
 			return sb.toString();
 		}
 		catch(Exception e){
-			e.printStackTrace();
+			System.out.println("无法连接！");
 		}
 
 		return null;
