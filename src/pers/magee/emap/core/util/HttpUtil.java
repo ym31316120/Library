@@ -30,6 +30,9 @@ public class HttpUtil {
 			conn.setUseCaches(false);	//POST请求缓存设为false
 			conn.setRequestProperty("Content-Type", "application/octet-stream");//设置请求头里面的各个属性，这里主要设置内容的类型
 			
+			conn.setConnectTimeout(500); //设置连接主机超时（单位：毫秒）
+			conn.setReadTimeout(500); //设置从主机读取数据超时（单位：毫秒
+			
 			//conn.setAllowUserInteraction(true);
 		    //conn.setChunkedStreamingMode(0);
 						
